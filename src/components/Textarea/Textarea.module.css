@@ -1,0 +1,64 @@
+.textarea {
+  position: relative;
+  outline: none;
+}
+
+.words {
+  font-family: 'JetBrains Mono';
+  font-size: 28px;
+  line-height: 30px;
+  color: #646669;
+
+  margin: 0 auto;
+  overflow: hidden;
+
+  display: flex;
+  flex-wrap: wrap;
+  cursor: default;
+}
+
+.word {
+  margin: 0.25em;
+}
+
+.letter {
+  position: relative;
+  text-align: center;
+}
+
+.typing_words {
+  position: absolute;
+  top: 0.2em;
+  left: 0.4em;
+}
+
+.caret {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 35px;
+  font-size: 20px;
+  background-color: #fff;
+  animation: pulsing 1s infinite;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+}
+
+@keyframes pulsing {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
