@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { nanoid } from 'nanoid';
+import React, { useEffect, useRef } from 'react';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { setIsFocused, setIsTyping, setTypedText } from '../../store/mainSlice';
 import styles from './Textarea.module.css';
+import Word from '../Word/Word';
+import { TEXTAREA_PLACEHOLDER } from '../../constants';
+import { nanoid } from 'nanoid';
 
-interface Props {
-  placeholder: string[];
-}
+const Textarea = () => {
+  const dispatch = useAppDispatch();
+  const { typedText, isTyping, isFocused } = useAppSelector((state) => state.main);
 
-const Textarea: React.FC<Props> = ({ placeholder }) => {
-  const [value, setValue] = useState<string[]>([]);
-
-  const [isFocused, setIsFocused] = useState<boolean>(false);
   const textareaRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -18,20 +18,30 @@ const Textarea: React.FC<Props> = ({ placeholder }) => {
       if (textareaRef.current && textareaRef.current.contains(e.target as Node)) {
         inputRef.current?.focus();
       } else {
-        setIsFocused(false);
+        dispatch(setIsFocused(false));
       }
     };
+
     document.body.addEventListener('click', setFocus);
 
     return () => {
       document.body.removeEventListener('click', setFocus);
     };
-  }, []);
+  }, [dispatch]);
 
   const handleTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isFocused) {
-      const val = e.target.value.trim().length ? e.target.value.split(/\s+/) : [];
-      setValue(val);
+      const value = e.target.value;
+
+      if (value.length === 1 && !isTyping) {
+        dispatch(setIsTyping(true));
+      }
+
+      const result = value.trim().length ? value.split(/\s+/) : [];
+
+      if (result.length && result[result.length - 1].length > 20) return;
+
+      dispatch(setTypedText(result));
     }
   };
 
@@ -42,56 +52,17 @@ const Textarea: React.FC<Props> = ({ placeholder }) => {
     }
   };
 
-  const checkCorrectnessAndReturnColor = (firstIndex: number, secondIndex: number): string => {
-    if (!value.length || !value[firstIndex] || !value[firstIndex][secondIndex]) return '#646669';
-
-    if (placeholder[firstIndex][secondIndex] !== value[firstIndex][secondIndex]) {
-      return '#D22B2B';
-    } else {
-      return '#fff';
-    }
-  };
-
   return (
     <div className={styles.textarea} ref={textareaRef}>
       <div className={styles.words}>
-        {placeholder.map((initialWord, wordIndex) => {
+        {TEXTAREA_PLACEHOLDER.map((initialWord, index) => {
           let word = initialWord;
 
-          if (value.length && value[wordIndex]?.length > initialWord.length) {
-            word = initialWord + value[wordIndex].substring(initialWord.length);
+          if (typedText.length && typedText[index]?.length > initialWord.length) {
+            word = initialWord + typedText[index].substring(initialWord.length);
           }
 
-          return (
-            <span className={styles.word} key={'word' + nanoid()}>
-              {word.split('').map((letter, letterIndex) => (
-                <span
-                  className={styles.letter}
-                  style={{ color: checkCorrectnessAndReturnColor(wordIndex, letterIndex) }}
-                  key={'letter' + nanoid()}
-                >
-                  {isFocused &&
-                    ((!value.length && wordIndex === 0) ||
-                      (value[wordIndex] === '' && letterIndex === 0) ||
-                      (wordIndex === value.length - 1 &&
-                        letterIndex === value[wordIndex].length - 1)) && (
-                      <div
-                        className={styles.caret}
-                        style={{
-                          left:
-                            !value.length || (value[wordIndex] === '' && letterIndex === 0)
-                              ? '0'
-                              : 'none',
-                          right: value.length ? '0' : 'none',
-                        }}
-                      ></div>
-                    )}
-
-                  {letter}
-                </span>
-              ))}
-            </span>
-          );
+          return <Word word={word} index={index} key={'word-' + nanoid()} />;
         })}
       </div>
 
@@ -99,9 +70,9 @@ const Textarea: React.FC<Props> = ({ placeholder }) => {
         <input
           className={styles.input}
           ref={inputRef}
-          value={value.join(' ')}
+          value={typedText.join(' ')}
           onChange={handleTyping}
-          onFocus={() => setIsFocused(true)}
+          onFocus={() => dispatch(setIsFocused(true))}
           onKeyDown={handleKeyDown}
           autoFocus
         />

@@ -1,0 +1,33 @@
+.word {
+  margin: 7px;
+}
+
+.letter {
+  position: relative;
+  text-align: center;
+}
+
+.caret {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 35px;
+  font-size: 20px;
+  background-color: #fff;
+  animation: pulsing 1s infinite;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+}
+
+@keyframes pulsing {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
