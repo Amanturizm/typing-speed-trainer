@@ -34,7 +34,7 @@ const Word: React.FC<Props> = ({ word, index }) => {
     <span
       className={styles.word}
       style={{
-        borderBottom: isIncorrectWord ? '2px solid #D22B2B' : 'none',
+        borderBottom: isIncorrectWord ? '0.2vw solid #D22B2B' : 'none',
         marginBottom: isIncorrectWord ? '4px' : '7px',
       }}
     >

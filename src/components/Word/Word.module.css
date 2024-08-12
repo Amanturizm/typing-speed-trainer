@@ -31,3 +31,34 @@
     opacity: 0;
   }
 }
+
+@media screen and (max-width: 700px) {
+  .word {
+    margin: 6px;
+  }
+
+  .caret {
+    width: 1.5px;
+    height: 30px;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .word {
+    margin: 5px;
+  }
+
+  .caret {
+    height: 25px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .word {
+    margin: 4px;
+  }
+
+  .caret {
+    height: 20px;
+  }
+}
