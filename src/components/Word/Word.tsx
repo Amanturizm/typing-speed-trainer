@@ -1,8 +1,8 @@
 import React from 'react';
 import { useAppSelector } from '../../app/hooks';
+import { nanoid } from 'nanoid';
 import { TEXTAREA_PLACEHOLDER } from '../../constants';
 import styles from './Word.module.css';
-import { nanoid } from 'nanoid';
 
 interface Props {
   word: string;
@@ -29,8 +29,6 @@ const Word: React.FC<Props> = ({ word, index }) => {
     typedText.length - 1 > index &&
     (typedText[index].length < TEXTAREA_PLACEHOLDER[index].length ||
       TEXTAREA_PLACEHOLDER[index] !== typedText[index]);
-
-  console.log('ok');
 
   return (
     <span

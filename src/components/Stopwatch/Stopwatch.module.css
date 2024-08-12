@@ -1,0 +1,47 @@
+.timer_wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 0 7px 30px;
+}
+
+.timer {
+  font-size: 2rem;
+  color: #fff;
+  transition: color 250ms linear;
+}
+
+.reload {
+  font-size: 1.3rem;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 30px;
+  padding: 5px 10px;
+
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  transition:
+    all 100ms linear,
+    opacity 250ms linear;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reload:hover {
+  background-color: #fff;
+  color: #222;
+}
+
+.reload span {
+  width: 20px;
+  height: 20px;
+  background-image: url('../../assets/images/rotate-light.svg');
+  background-repeat: no-repeat;
+}
+
+.reload:hover span {
+  background-image: url('../../assets/images/rotate-dark.svg');
+}

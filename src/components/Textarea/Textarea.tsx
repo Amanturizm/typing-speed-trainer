@@ -33,7 +33,7 @@ const Textarea = () => {
     if (isFocused) {
       const value = e.target.value;
 
-      if (value.length === 1 && !isTyping) {
+      if (!isTyping) {
         dispatch(setIsTyping(true));
       }
 
