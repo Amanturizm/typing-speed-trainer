@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { resetProgress, setMinutes, setSeconds } from '../../store/mainSlice';
 import styles from './Stopwatch.module.css';
@@ -24,10 +24,13 @@ const Stopwatch = () => {
     };
   }, [isTyping, dispatch, minutes, seconds]);
 
+  const timer =
+    (minutes < 10 ? `0${minutes}` : minutes) + ':' + (seconds < 10 ? `0${seconds}` : seconds);
+
   return (
     <div className={styles.timer_wrapper}>
       <div className={styles.timer} style={{ color: isTyping ? '#fff' : '#646669' }}>
-        {(minutes < 10 ? `0${minutes}` : minutes) + ':' + (seconds < 10 ? `0${seconds}` : seconds)}
+        {timer}
       </div>
 
       <button
@@ -42,4 +45,4 @@ const Stopwatch = () => {
   );
 };
 
-export default Stopwatch;
+export default React.memo(Stopwatch);

@@ -1,6 +1,7 @@
 .textarea {
   position: relative;
   outline: none;
+  user-select: none;
 }
 
 .words {

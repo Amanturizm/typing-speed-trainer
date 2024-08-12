@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { resetProgress } from '../../store/mainSlice';
 import { TEXTAREA_PLACEHOLDER } from '../../constants';
-import styles from './ResultModal.module.css';
-import xmarkIcon from '../../assets/images/xmark.svg';
 import { ErrorsInText, Result } from '../../typed';
+import xmarkIcon from '../../assets/images/xmark.svg';
+import styles from './ResultModal.module.css';
 
 const initialState: Result = {
   typedText: [],
@@ -22,11 +22,14 @@ const ResultModal = () => {
 
   const [result, setResult] = useState<Result>(initialState);
 
-  const isTyped =
-    typedText.length !== 0 &&
-    typedText.length === TEXTAREA_PLACEHOLDER.length &&
-    typedText[typedText.length - 1].length ===
-      TEXTAREA_PLACEHOLDER[TEXTAREA_PLACEHOLDER.length - 1].length;
+  const isTyped = useMemo(
+    () =>
+      typedText.length !== 0 &&
+      typedText.length === TEXTAREA_PLACEHOLDER.length &&
+      typedText[typedText.length - 1].length ===
+        TEXTAREA_PLACEHOLDER[TEXTAREA_PLACEHOLDER.length - 1].length,
+    [typedText],
+  );
 
   const calculateWPM = useCallback((): number => {
     const wordCount = typedText.length;
@@ -123,12 +126,14 @@ const ResultModal = () => {
                   <span>{result.errorsInText.incorrect}</span>
                 </h4>
               )}
+
               {result.errorsInText.extra > 0 && (
                 <h4>
                   <span>Extra</span>
                   <span>{result.errorsInText.extra}</span>
                 </h4>
               )}
+
               {result.errorsInText.missed > 0 && (
                 <h4>
                   <span>Missed</span>
@@ -143,4 +148,4 @@ const ResultModal = () => {
   );
 };
 
-export default ResultModal;
+export default React.memo(ResultModal);

@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setIsFocused, setIsTyping, setTypedText } from '../../store/mainSlice';
-import styles from './Textarea.module.css';
-import Word from '../Word/Word';
-import { TEXTAREA_PLACEHOLDER } from '../../constants';
 import { nanoid } from 'nanoid';
+import { TEXTAREA_PLACEHOLDER } from '../../constants';
+import Word from '../Word/Word';
+import styles from './Textarea.module.css';
 
 const Textarea = () => {
   const dispatch = useAppDispatch();
@@ -29,25 +29,29 @@ const Textarea = () => {
     };
   }, [dispatch]);
 
-  const handleTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (isFocused) {
-      const value = e.target.value;
+  const handleTyping = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!isFocused) return;
 
-      if (!isTyping) {
-        dispatch(setIsTyping(true));
-      }
+      if (!isTyping) dispatch(setIsTyping(true));
+
+      const value = e.target.value;
 
       const result = value.trim().length ? value.split(/\s+/) : [];
 
       if (result.length && result[result.length - 1].length > 20) return;
 
       dispatch(setTypedText(result));
-    }
-  };
+    },
+    [isFocused, isTyping, dispatch],
+  );
 
-  // Prohibition of moving the input cursor
+  // Prohibition of moving the input cursor and ctrl + a/c/v
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (['ArrowLeft', 'ArrowRight'].includes(e.key)) {
+    if (
+      ['ArrowLeft', 'ArrowRight'].includes(e.key) ||
+      (e.ctrlKey && ['a', 'c', 'v'].includes(e.key.toLowerCase()))
+    ) {
       e.preventDefault();
     }
   };
