@@ -21,9 +21,7 @@
   background-color: transparent;
   outline: none;
   cursor: pointer;
-  transition:
-    all 100ms linear,
-    opacity 250ms linear;
+  transition: all 100ms linear;
 
   display: flex;
   align-items: center;
